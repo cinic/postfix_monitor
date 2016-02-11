@@ -25,6 +25,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'russian', '~> 0.6.0'
 # For deployment upstart scripts
 gem 'foreman'
+# Use cron for jobs
+gem 'whenever', require: false
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -42,6 +45,8 @@ group :development, :test do
   # and get a debugger console
   gem 'byebug'
   gem 'awesome_print'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
 end
 
 group :development do
@@ -57,4 +62,8 @@ group :development do
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
   gem 'spring'
+end
+
+group :test do
+  gem 'database_cleaner'
 end
