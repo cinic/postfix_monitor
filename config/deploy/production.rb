@@ -1,38 +1,46 @@
+set :stage, :production
+set :deploy_to, '/home/tornado/postfix_monitor/production'
+set :app_name, 'postfix_monitor'
+set :user, 'tornado'
+set :branch, 'master'
+# set :rails_env, 'staging' #added for delayed job
+# set :delayed_job_command, 'bin/delayed_job'
+# set :delayed_job_args, '--queues=packets,intervals'
+
 # Simple Role Syntax
 # ==================
-# Supports bulk-adding hosts to roles, the primary server in each group
-# is considered to be the first unless any hosts have the primary
-# property set.  Don't declare `role :all`, it's a meta role.
-
-role :app, %w{deploy@example.com}
-role :web, %w{deploy@example.com}
-role :db,  %w{deploy@example.com}
-
+# Supports bulk-adding hosts to roles, the primary
+# server in each group is considered to be the first
+# unless any hosts have the primary property set.
+role :app, %w{198.199.125.38}
+role :web, %w{198.199.125.38}
+role :db,  %w{198.199.125.38}
 
 # Extended Server Syntax
 # ======================
-# This can be used to drop a more detailed server definition into the
-# server list. The second argument is a, or duck-types, Hash and is
-# used to set extended properties on the server.
+# This can be used to drop a more detailed server
+# definition into the server list. The second argument
+# something that quacks like a hash can be used to set
+# extended properties on the server.
+server '198.199.125.38', user: 'tornado', roles: %w{web app db}, primary: :true
 
-server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
-
-
-# Custom SSH Options
-# ==================
-# You may pass any option but keep in mind that net/ssh understands a
-# limited set of options, consult[net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start).
-#
-# Global options
-# --------------
+# you can set custom ssh options
+# it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
+# you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
+# set it globally
 #  set :ssh_options, {
 #    keys: %w(/home/rlisowski/.ssh/id_rsa),
 #    forward_agent: false,
 #    auth_methods: %w(password)
 #  }
-#
-# And/or per server (overrides global)
-# ------------------------------------
+set :ssh_options, {
+  user: 'tornado',
+  keys: %w(~/.ssh/id_rsa),
+  port: 2605,
+  forward_agent: false,
+  auth_methods: %w(publickey)
+}
+# and/or per server
 # server 'example.com',
 #   user: 'user_name',
 #   roles: %w{web app},
@@ -43,3 +51,6 @@ server 'example.com', user: 'deploy', roles: %w{web app}, my_property: :my_value
 #     auth_methods: %w(publickey password)
 #     # password: 'please use keys'
 #   }
+# setting per server overrides global ssh_options
+
+fetch(:default_env).merge!(rails_env: :staging)
