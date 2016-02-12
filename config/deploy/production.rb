@@ -1,6 +1,6 @@
 set :stage, :production
 set :deploy_to, '/home/tornado/postfix_monitor/production'
-set :app_name, 'postfix_monitor'
+set :application, 'postfix_monitor'
 set :user, 'tornado'
 set :branch, 'master'
 # set :rails_env, 'staging' #added for delayed job

@@ -1,7 +1,6 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'my_app_name'
 set :repo_url, 'git@github.com:cinic/postfix_monitor.git'
 set :rbenv_type, :user # or :system, depends on your rbenv setup
 set :rbenv_ruby, '2.2.3'
@@ -29,7 +28,8 @@ set :pty, true
 set :foreman_use_sudo, false
 set :foreman_roles, :all
 set :foreman_template, 'upstart'
-set :foreman_export_path, -> { File.join(Dir.home, '.init') }
+# set :foreman_export_path, -> { File.join(Dir.home, '.init') }
+set :foreman_export_path, -> { File.join('/home', fetch(:user), '.init') }
 set :foreman_options, -> { {
   app: fetch(:application),
   log: File.join(shared_path, 'log')
@@ -46,6 +46,24 @@ set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+namespace :foreman do
+  desc 'Export the Procfile'
+  task :export do
+    on roles fetch(:foreman_roles) do
+      opts = fetch(:foreman_options, {})
+      opts.merge!(host.properties.fetch(:foreman_options) || {})
+      execute(:mkdir, '-p', opts[:log])
+
+      within release_path do
+        execute :rbenv, :foreman, 'export',
+                fetch(:foreman_template),
+                fetch(:foreman_export_path),
+                opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
+      end
+    end
+  end
+end
 
 namespace :deploy do
   desc 'Restart application'
