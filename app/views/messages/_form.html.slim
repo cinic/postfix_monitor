@@ -1,0 +1,15 @@
+= form_for @message do |f|
+  - if @message.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@message.errors.count, "error")} prohibited this message from being saved:"
+      ul
+        - @message.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :postfix_queue_id
+    = f.text_field :postfix_queue_id
+  .field
+    = f.label :postfix_message_id
+    = f.text_field :postfix_message_id
+  .actions = f.submit

@@ -1,0 +1,29 @@
+h1 Listing recipients
+
+table
+  thead
+    tr
+      th Address
+      th Status
+      th Status raw
+      th Delivered
+      th Message
+      th
+      th
+      th
+
+  tbody
+    - @recipients.each do |recipient|
+      tr
+        td = recipient.address
+        td = recipient.status
+        td = recipient.status_raw
+        td = recipient.delivered
+        td = recipient.message
+        td = link_to 'Show', recipient
+        td = link_to 'Edit', edit_recipient_path(recipient)
+        td = link_to 'Destroy', recipient, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Recipient', new_recipient_path

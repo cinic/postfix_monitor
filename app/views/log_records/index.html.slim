@@ -1,0 +1,29 @@
+h1 Listing log_records
+
+table
+  thead
+    tr
+      th Postfix
+      th Client
+      th Client ip
+      th Message
+      th Status
+      th
+      th
+      th
+
+  tbody
+    - @log_records.each do |log_record|
+      tr
+        td = log_record.postfix_id
+        td = log_record.client
+        td = log_record.client_ip
+        td = log_record.message_id
+        td = log_record.status
+        td = link_to 'Show', log_record
+        td = link_to 'Edit', edit_log_record_path(log_record)
+        td = link_to 'Destroy', log_record, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Log record', new_log_record_path

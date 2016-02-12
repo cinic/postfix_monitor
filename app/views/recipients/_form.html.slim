@@ -1,0 +1,24 @@
+= form_for @recipient do |f|
+  - if @recipient.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@recipient.errors.count, "error")} prohibited this recipient from being saved:"
+      ul
+        - @recipient.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :address
+    = f.text_field :address
+  .field
+    = f.label :status
+    = f.text_field :status
+  .field
+    = f.label :status_raw
+    = f.text_field :status_raw
+  .field
+    = f.label :delivered
+    = f.check_box :delivered
+  .field
+    = f.label :message
+    = f.text_field :message
+  .actions = f.submit

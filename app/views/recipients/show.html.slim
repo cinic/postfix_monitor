@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Address:
+  = @recipient.address
+p
+  strong Status:
+  = @recipient.status
+p
+  strong Status raw:
+  = @recipient.status_raw
+p
+  strong Delivered:
+  = @recipient.delivered
+p
+  strong Message:
+  = @recipient.message
+
+= link_to 'Edit', edit_recipient_path(@recipient)
+'|
+= link_to 'Back', recipients_path
