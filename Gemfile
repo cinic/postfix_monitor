@@ -39,7 +39,6 @@ gem 'whenever', require: false
 
 # Use Puma for production server
 gem 'puma', group: :production
-gem 'foreman'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution
@@ -54,6 +53,7 @@ group :development do
   gem 'thin'
   gem 'capistrano', '~> 3.2.0'
   gem 'capistrano-rbenv'
+  gem 'capistrano-foreman'
   gem 'capistrano-bundler', '~> 1.1.2'
   gem 'capistrano-rails', '~> 1.1'
   # Debugging
