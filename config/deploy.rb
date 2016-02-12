@@ -26,7 +26,7 @@ set :pty, true
 
 # Foreman configuration
 # Set to :rbenv for rbenv sudo, :rvm for rvmsudo or true for normal sudo
-set :foreman_use_sudo, :rbenv
+set :foreman_use_sudo, false
 set :foreman_roles, :all
 set :foreman_template, 'upstart'
 set :foreman_export_path, -> { File.join(Dir.home, '.init') }
