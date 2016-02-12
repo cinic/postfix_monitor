@@ -24,8 +24,19 @@ set :scm, :git
 # Default value for :pty is false
 set :pty, true
 
+# Foreman configuration
+# Set to :rbenv for rbenv sudo, :rvm for rvmsudo or true for normal sudo
+set :foreman_use_sudo, :rbenv
+set :foreman_roles, :all
+set :foreman_template, 'upstart'
+set :foreman_export_path, -> { File.join(Dir.home, '.init') }
+set :foreman_options, -> { {
+  app: fetch(:application),
+  log: File.join(shared_path, 'log')
+} }
+
 # Default value for :linked_files is []
-set :linked_files, %w(config/database.yml log/mail.log)
+set :linked_files, %w(config/database.yml)
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system)
@@ -45,14 +56,15 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :restart
+  # after :publishing, :restart
+  after :finishing, 'foreman:export'
+  after :finishing, 'foreman:restart'
 
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+      within release_path do
+        execute :rake, 'cache:clear'
+      end
     end
   end
 end
