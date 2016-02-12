@@ -39,6 +39,7 @@ gem 'whenever', require: false
 
 # Use Puma for production server
 gem 'puma', group: :production
+gem 'foreman'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution
