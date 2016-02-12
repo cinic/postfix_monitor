@@ -11,26 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160212004412) do
+ActiveRecord::Schema.define(version: 20160212010455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "log_records", force: :cascade do |t|
-    t.string   "postfix_id"
-    t.string   "client"
-    t.inet     "client_ip"
-    t.string   "message_id"
-    t.string   "status"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
-    t.boolean  "delivered"
-    t.integer  "status_code", limit: 2
-  end
-
-  add_index "log_records", ["client"], name: "index_log_records_on_client", using: :btree
-  add_index "log_records", ["delivered"], name: "index_log_records_on_delivered", using: :btree
-  add_index "log_records", ["postfix_id"], name: "index_log_records_on_postfix_id", using: :btree
 
   create_table "messages", force: :cascade do |t|
     t.string   "postfix_queue_id"
