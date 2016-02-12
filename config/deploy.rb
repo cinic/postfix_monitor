@@ -56,10 +56,12 @@ namespace :foreman do
       execute(:mkdir, '-p', opts[:log])
 
       within release_path do
-        execute :rbenv, :foreman, 'export',
-                fetch(:foreman_template),
-                fetch(:foreman_export_path),
-                opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
+        with rails_env: fetch(:rails_env) do
+          execute :foreman, 'export',
+                  fetch(:foreman_template),
+                  fetch(:foreman_export_path),
+                  opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
+        end
       end
     end
   end
