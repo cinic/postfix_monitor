@@ -2,6 +2,8 @@
 lock '3.2.1'
 
 set :repo_url, 'git@github.com:cinic/postfix_monitor.git'
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins, %w(rake gem bundle ruby rails)
 set :rbenv_type, :user # or :system, depends on your rbenv setup
 set :rbenv_ruby, '2.2.3'
 
@@ -23,18 +25,6 @@ set :scm, :git
 # Default value for :pty is false
 set :pty, true
 
-# Foreman configuration
-# Set to :rbenv for rbenv sudo, :rvm for rvmsudo or true for normal sudo
-set :foreman_use_sudo, false
-set :foreman_roles, :all
-set :foreman_template, 'upstart'
-# set :foreman_export_path, -> { File.join(Dir.home, '.init') }
-set :foreman_export_path, -> { File.join('/home', fetch(:user), '.init') }
-set :foreman_options, -> { {
-  app: fetch(:application),
-  log: File.join(shared_path, 'log')
-} }
-
 # Default value for :linked_files is []
 set :linked_files, %w(config/database.yml)
 
@@ -50,19 +40,34 @@ set :linked_dirs, %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 namespace :foreman do
   desc 'Export the Procfile'
   task :export do
-    on roles fetch(:foreman_roles) do
-      opts = fetch(:foreman_options, {})
-      opts.merge!(host.properties.fetch(:foreman_options) || {})
-      execute(:mkdir, '-p', opts[:log])
+    on roles :app do
+      execute "cd #{current_path} && (RAILS_ENV=#{fetch(:stage)} "\
+      "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} "\
+      "#{fetch(:rbenv_path)}/bin/rbenv sudo "\
+      "$(#{fetch(:rbenv_path)}/bin/rbenv which bundle) exec foreman "\
+      "export upstart /etc/init -a #{fetch(:application)} -u #{fetch(:user)}"\
+      " -l #{shared_path}/log/#{fetch(:application)})"
+    end
+  end
 
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :foreman, 'export',
-                  fetch(:foreman_template),
-                  fetch(:foreman_export_path),
-                  opts.map { |opt, value| "--#{opt}=\"#{value}\"" }.join(' ')
-        end
-      end
+  desc 'Start the application services'
+  task :start do
+    on roles :app do
+      execute :sudo, :service, fetch(:application), :start
+    end
+  end
+
+  desc 'Stop the application services'
+  task :stop do
+    on roles :app do
+      execute :sudo, :service, fetch(:application), :stop
+    end
+  end
+
+  desc 'Restart the application services'
+  task :restart do
+    on roles :app do
+      execute :sudo, :service, fetch(:application), :restart
     end
   end
 end
