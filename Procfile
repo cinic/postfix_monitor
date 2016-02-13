@@ -1,1 +1,1 @@
-web: bundle exec puma -C config/puma.rb -e production
+web: RAILS_ENV=production bundle exec puma -C config/puma.rb -e production
