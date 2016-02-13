@@ -37,6 +37,9 @@ gem 'whenever', require: false
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Authintication
+gem 'devise'
+
 # Use Puma for production server
 gem 'puma', group: :production
 
