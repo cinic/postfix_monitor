@@ -46,7 +46,7 @@ namespace :foreman do
       "#{fetch(:rbenv_path)}/bin/rbenv sudo "\
       "$(#{fetch(:rbenv_path)}/bin/rbenv which bundle) exec foreman "\
       "export upstart /etc/init -a #{fetch(:application)} -u #{fetch(:user)}"\
-      " -l #{shared_path}/log"
+      " -l #{shared_path}/log)"
     end
   end
 
