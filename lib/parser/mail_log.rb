@@ -71,8 +71,9 @@ module Parser
       return if recipient.nil?
       row = Message.where(postfix_queue_id: recipient[1]).first
       delivered = true if recipient[5] == '250'
-      row.recipients.create(address: recipient[2], status: recipient[4],
-                            delivered: delivered, status_raw: recipient[3])
+      row.recipients
+         .create(address: recipient[2], status: recipient[4],
+                 delivered: delivered, status_raw: recipient[3]) unless row.nil?
     end
   end
 end
