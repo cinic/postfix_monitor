@@ -18,7 +18,7 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
-set :output, Rails.root.join('log/cron_log.log').to_s
+set :output, File.join(Whenever.path, 'log', 'cron.log')
 
 # Many shortcuts available: :hour, :day, :month, :year, :reboot
 every :day, at: '02:00am' do
