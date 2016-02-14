@@ -51,8 +51,9 @@ module Parser
 
     def create_row(data)
       return if data.nil? || data[1].nil?
-      Message.create(postfix_queue_id: data[1],
-                     client: Rails.application.secrets.log_mail_server)
+      Message.where(postfix_queue_id: data[1],
+                    client: Rails.application.secrets.log_mail_server)
+             .first_or_create
     end
 
     def update_subject(subject)
@@ -72,8 +73,9 @@ module Parser
       row = Message.where(postfix_queue_id: recipient[1]).first
       delivered = true if recipient[5] == '250'
       row.recipients
-         .create(address: recipient[2], status: recipient[4],
-                 delivered: delivered, status_raw: recipient[3]) unless row.nil?
+         .where(address: recipient[2], status: recipient[4],
+                delivered: delivered, status_raw: recipient[3])
+         .first_or_create unless row.nil?
     end
   end
 end
