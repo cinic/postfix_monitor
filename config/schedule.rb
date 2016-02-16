@@ -22,5 +22,5 @@ set :output, File.join(Whenever.path, 'log', 'cron.log')
 
 # Many shortcuts available: :hour, :day, :month, :year, :reboot
 every :day, at: '02:00am' do
-  runner 'Message.decode_log'
+  rake 'parser:fetch'
 end
