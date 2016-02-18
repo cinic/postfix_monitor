@@ -19,7 +19,8 @@
 
 # Learn more: http://github.com/javan/whenever
 job_type :rbenv_rake, %{ export PATH=~/.rbenv/shims:~/.rbenv/bin:/usr/bin:$PATH;
-  eval "$(rbenv init -)"; cd :path && bundle exec rake :task --silent :output }
+  eval "$(rbenv init -)"; cd :path && :environment_variable=:environment
+  bundle exec rake :task --silent :output }
 set :output, File.join(Whenever.path, 'log', 'cron.log')
 
 # Many shortcuts available: :hour, :day, :month, :year, :reboot
