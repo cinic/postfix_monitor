@@ -18,9 +18,12 @@
 # end
 
 # Learn more: http://github.com/javan/whenever
+job_type :rbenv_rake, '$(which rbenv) ; '\
+  'cd :path && :environment_variable=:environment '\
+  ':bundle_command rake :task --silent :output'
 set :output, File.join(Whenever.path, 'log', 'cron.log')
 
 # Many shortcuts available: :hour, :day, :month, :year, :reboot
 every :day, at: '02:00am' do
-  rake 'parser:fetch'
+  rbenv_rake 'parser:fetch'
 end
