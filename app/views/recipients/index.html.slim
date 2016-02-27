@@ -20,10 +20,3 @@ table
         td = recipient.status_raw
         td = recipient.delivered
         td = recipient.message
-        td = link_to 'Show', recipient
-        td = link_to 'Edit', edit_recipient_path(recipient)
-        td = link_to 'Destroy', recipient, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Recipient', new_recipient_path

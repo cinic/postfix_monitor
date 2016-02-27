@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :recipients
-  resources :messages
+  resources :messages, only: [:index, :show] do
+    resources :recipients, only: :index
+  end
 
   root 'messages#index'
   # The priority is based upon order of creation: first created -> highest priority.

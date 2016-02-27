@@ -3,8 +3,8 @@ h1 Listing messages
 table
   thead
     tr
-      th Postfix queue
-      th Postfix message
+      th Сообщение
+      th Получатели
       th
       th
       th
@@ -12,12 +12,6 @@ table
   tbody
     - @messages.each do |message|
       tr
-        td = message.postfix_queue_id
-        td = message.postfix_message_id
+        td = message.subject
+        td = message.recipients.count
         td = link_to 'Show', message
-        td = link_to 'Edit', edit_message_path(message)
-        td = link_to 'Destroy', message, data: {:confirm => 'Are you sure?'}, :method => :delete
-
-br
-
-= link_to 'New Message', new_message_path
