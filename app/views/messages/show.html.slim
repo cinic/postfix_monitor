@@ -6,5 +6,15 @@ p
 p
   strong Postfix message:
   = @message.postfix_message_id
+p
+  strong Postfix delivered:
+  - @message.recipients.delivered_list.each do |item|
+    = item.address
+    ' , 
+p
+  strong Postfix undelivered:
+  - @message.recipients.undelivered_list.each do |item|
+    = item.address
+    ' , 
 '|
 = link_to 'Back', messages_path

@@ -4,14 +4,18 @@ table
   thead
     tr
       th Сообщение
+      th Отправлено
       th Получатели
-      th
-      th
+      th Доставлено
+      th Недоставлено
       th
 
   tbody
     - @messages.each do |message|
       tr
-        td = message.subject
+        td = message.postfix_message_id
+        td = message.sended
         td = message.recipients.count
+        td = message.recipients.delivered
+        td = message.recipients.undelivered
         td = link_to 'Show', message
